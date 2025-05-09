@@ -40,12 +40,24 @@ router.delete("/:movieId", async function (req, res) {
 });
 
 router.get("/:movieId/users", async function (req, res) {
-  // TODO: Get all users who watched this movie.
+  const movie = await Movie.findByPk(req.params.movieId);
+  if (movie){
+    const users = await movie.getUsers();
+    res.status(200).send(users);
+  } else{
+    res.status(404).send([]);
+  }
 });
 
 router.post("/:movieId/users/:userId", async function (req, res) {
-  // TODO: Associate a movie with a user who has watched it.
-  // HINT: No body required; all the required info is in the params!
+  const movie = await Movie.findByPk(req.params.movieId);
+  const user = await User.findByPk(req.params.userId)
+  if (!movie || !user) {
+    return res.status(404).send();
+  } else {
+    await movie.addUser(user);
+    res.status(200).send();
+  }
 });
 
 module.exports = router;

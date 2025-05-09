@@ -9,6 +9,8 @@ router.post("/", async function (req, res) {
 
 router.get("/", async function (req, res) {
   // TODO: Get all users.
+  const users = await User.findAll();
+  res.json(users);
 });
 
 router.get("/:userId", async function (req, res) {
